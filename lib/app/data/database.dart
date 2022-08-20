@@ -4,7 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 
 const TRANSACTION_DB_NAME = 'transaction-db';
 
-class TransactionDbFunctions extends GetxController {
+class GetDataFromApi extends GetxController {
   RxList<LocalModel> newList = <LocalModel>[].obs;
   @override
   Future<void> addData(LocalModel obj) async {
@@ -14,13 +14,13 @@ class TransactionDbFunctions extends GetxController {
 
   @override
   Future<void> refresh() async {
-    final alltransaction = await getAllTransactions();
+    final alltransaction = await getData();
     newList.clear();
     newList.addAll(alltransaction);
   }
 
   @override
-  Future<List<LocalModel>> getAllTransactions() async {
+  Future<List<LocalModel>> getData() async {
     final db = await Hive.openBox<LocalModel>(TRANSACTION_DB_NAME);
     return db.values.toList();
   }

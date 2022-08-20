@@ -6,16 +6,20 @@ import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 
 class HomeController extends GetxController {
-  final TransactionDbFunctions _cont = Get.put(TransactionDbFunctions());
+  final GetDataFromApi _cont = Get.put(GetDataFromApi());
   //TODO: Implement HomeController
   int? newVal;
   final count = 0.obs;
   List<UniversityModel> universities = [];
   fetchData<UniversityModel>() async {
-    final response = await http.get(
-        Uri.parse('http://universities.hipolabs.com/search?country=India'));
+    try {
+      final response = await http.get(
+          Uri.parse('http://universities.hipolabs.com/search?country=India'));
 
-    universities = universityModelFromJson(response.body);
+      universities = universityModelFromJson(response.body);
+    } catch (e) {
+      Get.snackbar('title', e.toString());
+    }
   }
 
   openLink(String link) {
@@ -28,10 +32,10 @@ class HomeController extends GetxController {
       required String website,
       required int index}) async {
     dynamic model;
-    for (int i = 0; i <= TransactionDbFunctions().newList.length; i++) {
-      if (TransactionDbFunctions().newList.isEmpty) {
+    for (int i = 0; i <= GetDataFromApi().newList.length; i++) {
+      if (GetDataFromApi().newList.isEmpty) {
         model = LocalModel(id: index.toString(), name: name, website: website);
-      } else if (index.toString() == TransactionDbFunctions().newList[i].id) {
+      } else if (index.toString() == GetDataFromApi().newList[i].id) {
         Get.snackbar('title', 'Data is already present');
       }
     }
